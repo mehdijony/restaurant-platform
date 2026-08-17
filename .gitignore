@@ -1,42 +1,31 @@
 # Dependencies
-node_modules
-.pnpm-store
+node_modules/
 
 # Build output
-dist
-build
-.next
-out
+dist/
+build/
+.next/
 
 # Environment files
 .env
 .env.local
-.env.*.local
-
-# TypeScript
-*.tsbuildinfo
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Logs
-logs
 *.log
 npm-debug.log*
-pnpm-debug.log*
 
 # OS
 .DS_Store
 Thumbs.db
 
 # IDE
-.vscode
-.idea
+.vscode/
+.idea/
 *.swp
 *.swo
 
-# Docker
-.docker
-
 # Test coverage
-coverage
-
-# Prisma
-prisma/generated
+coverage/

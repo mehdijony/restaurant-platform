@@ -1,19 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
-
-interface HealthResponse {
-  status: string;
-  service: string;
-  timestamp: string;
-}
+import { HealthService } from './health.service';
 
 @Controller('health')
 export class HealthController {
+  constructor(private readonly healthService: HealthService) {}
+
   @Get()
-  check(): HealthResponse {
-    return {
-      status: 'ok',
-      service: 'api-gateway',
-      timestamp: new Date().toISOString(),
-    };
+  check() {
+    return this.healthService.check();
   }
 }

@@ -1,0 +1,334 @@
+{
+    "realm": "restaurant",
+    "enabled": true,
+    "displayName": "Restaurant Platform",
+    "sslRequired": "external",
+    "registrationAllowed": false,
+    "loginWithEmailAllowed": true,
+    "duplicateEmailsAllowed": false,
+    "resetPasswordAllowed": true,
+    "editUsernameAllowed": false,
+    "bruteForceProtected": true,
+    "loginTheme": "keycloak",
+    "accountTheme": "keycloak.v2",
+    "adminTheme": "keycloak.v2",
+    "emailTheme": "keycloak",
+    "accessTokenLifespan": 3000,
+    "ssoSessionIdleTimeout": 1800,
+    "ssoSessionMaxLifespan": 36000,
+    "offlineSessionIdleTimeout": 2592000,
+    "accessCodeLifespan": 600,
+    "accessCodeLifespanUserAction": 3000,
+    "roles": {
+        "realm": [
+            {
+                "name": "SUPER_ADMIN",
+                "description": "Platform super administrator"
+            },
+            {
+                "name": "COMPANY_ADMIN",
+                "description": "Company administrator"
+            },
+            {
+                "name": "RESTAURANT_ADMIN",
+                "description": "Restaurant administrator"
+            },
+            {
+                "name": "MANAGER",
+                "description": "Branch manager"
+            },
+            {
+                "name": "CASHIER",
+                "description": "Cashier"
+            },
+            {
+                "name": "KITCHEN",
+                "description": "Kitchen staff"
+            },
+            {
+                "name": "INVENTORY_MANAGER",
+                "description": "Inventory manager"
+            },
+            {
+                "name": "DELIVERY_MANAGER",
+                "description": "Delivery manager"
+            },
+            {
+                "name": "DRIVER",
+                "description": "Delivery driver"
+            },
+            {
+                "name": "CUSTOMER",
+                "description": "Customer"
+            }
+        ]
+    },
+    "clients": [
+        {
+            "clientId": "api",
+            "name": "API Backend",
+            "enabled": true,
+            "clientAuthenticatorType": "client-secret",
+            "secret": "pa7vfHxe4Cplf2vcT6d7rZBNwPdKgnRN",
+            "bearerOnly": false,
+            "publicClient": false,
+            "standardFlowEnabled": true,
+            "implicitFlowEnabled": false,
+            "directAccessGrantsEnabled": true,
+            "serviceAccountsEnabled": false,
+            "consentRequired": false,
+            "fullScopeAllowed": true,
+            "redirectUris": [
+                "http://localhost:3000/*"
+            ],
+            "webOrigins": [
+                "http://localhost:3000"
+            ],
+            "protocol": "openid-connect",
+            "defaultClientScopes": [
+                "web-origins",
+                "acr",
+                "roles",
+                "profile",
+                "email"
+            ],
+            "optionalClientScopes": [
+                "address",
+                "phone",
+                "offline_access",
+                "microprofile-jwt"
+            ]
+        },
+        {
+            "clientId": "web-app",
+            "name": "Web Application",
+            "enabled": true,
+            "publicClient": true,
+            "standardFlowEnabled": true,
+            "implicitFlowEnabled": false,
+            "directAccessGrantsEnabled": true,
+            "consentRequired": false,
+            "fullScopeAllowed": true,
+            "redirectUris": [
+                "http://localhost:3000/*",
+                "http://localhost:3002/*"
+            ],
+            "webOrigins": [
+                "http://localhost:3000",
+                "http://localhost:3002"
+            ],
+            "protocol": "openid-connect",
+            "defaultClientScopes": [
+                "web-origins",
+                "acr",
+                "roles",
+                "profile",
+                "email"
+            ],
+            "optionalClientScopes": [
+                "address",
+                "phone",
+                "offline_access",
+                "microprofile-jwt"
+            ]
+        },
+        {
+            "clientId": "mobile-app",
+            "name": "Mobile Application",
+            "enabled": true,
+            "publicClient": true,
+            "standardFlowEnabled": true,
+            "implicitFlowEnabled": false,
+            "directAccessGrantsEnabled": true,
+            "consentRequired": false,
+            "fullScopeAllowed": true,
+            "redirectUris": [
+                "exp://localhost:8081/*",
+                "myapp://*"
+            ],
+            "webOrigins": [
+                "*"
+            ],
+            "protocol": "openid-connect",
+            "defaultClientScopes": [
+                "web-origins",
+                "acr",
+                "roles",
+                "profile",
+                "email"
+            ],
+            "optionalClientScopes": [
+                "address",
+                "phone",
+                "offline_access",
+                "microprofile-jwt"
+            ]
+        },
+        {
+            "clientId": "pos-app",
+            "name": "POS Application",
+            "enabled": true,
+            "publicClient": true,
+            "standardFlowEnabled": true,
+            "implicitFlowEnabled": false,
+            "directAccessGrantsEnabled": true,
+            "consentRequired": false,
+            "fullScopeAllowed": true,
+            "redirectUris": [
+                "http://localhost:3003/*"
+            ],
+            "webOrigins": [
+                "http://localhost:3003"
+            ],
+            "protocol": "openid-connect",
+            "defaultClientScopes": [
+                "web-origins",
+                "acr",
+                "roles",
+                "profile",
+                "email"
+            ],
+            "optionalClientScopes": [
+                "address",
+                "phone",
+                "offline_access",
+                "microprofile-jwt"
+            ]
+        }
+    ],
+    "users": [
+        {
+            "username": "superadmin",
+            "enabled": true,
+            "emailVerified": true,
+            "email": "superadmin@restaurant.local",
+            "firstName": "Super",
+            "lastName": "Admin",
+            "requiredActions": [],
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "superadmin123",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "SUPER_ADMIN"
+            ]
+        },
+        {
+            "username": "companyadmin",
+            "enabled": true,
+            "emailVerified": true,
+            "email": "companyadmin@restaurant.local",
+            "firstName": "Company",
+            "lastName": "Admin",
+            "requiredActions": [],
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "companyadmin123",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "COMPANY_ADMIN"
+            ]
+        },
+        {
+            "username": "manager",
+            "enabled": true,
+            "emailVerified": true,
+            "email": "manager@restaurant.local",
+            "firstName": "Branch",
+            "lastName": "Manager",
+            "requiredActions": [],
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "manager123",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "MANAGER"
+            ]
+        },
+        {
+            "username": "cashier",
+            "enabled": true,
+            "emailVerified": true,
+            "email": "cashier@restaurant.local",
+            "firstName": "Test",
+            "lastName": "Cashier",
+            "requiredActions": [],
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "cashier123",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "CASHIER"
+            ]
+        },
+        {
+            "username": "kitchen",
+            "enabled": true,
+            "emailVerified": true,
+            "email": "kitchen@restaurant.local",
+            "firstName": "Kitchen",
+            "lastName": "Staff",
+            "requiredActions": [],
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "kitchen123",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "KITCHEN"
+            ]
+        },
+        {
+            "username": "driver",
+            "enabled": true,
+            "emailVerified": true,
+            "email": "driver@restaurant.local",
+            "firstName": "Test",
+            "lastName": "Driver",
+            "requiredActions": [],
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "driver123",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "DRIVER"
+            ]
+        },
+        {
+            "username": "customer",
+            "enabled": true,
+            "emailVerified": true,
+            "email": "customer@restaurant.local",
+            "firstName": "Test",
+            "lastName": "Customer",
+            "requiredActions": [],
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "customer123",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "CUSTOMER"
+            ]
+        }
+    ]
+}

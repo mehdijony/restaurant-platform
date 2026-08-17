@@ -1,18 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors();
-
-  const port = process.env.PORT ?? 3000;
+  const port = parseInt(process.env.PORT ?? '3000', 10);
 
   await app.listen(port);
 
-  console.log(`api-gateway running on http://localhost:${port}`);
-  console.log(`health:    http://localhost:${port}/health`);
-  console.log(`auth:      http://localhost:${port}/auth/login`);
+  console.log(
+    JSON.stringify({
+      level: 'info',
+      message: `api-gateway running on port ${port}`,
+      service: 'api-gateway',
+      timestamp: new Date().toISOString(),
+    }),
+  );
 }
 
 bootstrap();
