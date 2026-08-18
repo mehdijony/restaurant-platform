@@ -1,0 +1,135 @@
+// services/restaurant-service/prisma/schema.prisma
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./generated"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum CompanyStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum RestaurantStatus {
+  ACTIVE
+  INACTIVE
+  TEMPORARILY_CLOSED
+}
+
+enum BranchStatus {
+  ACTIVE
+  INACTIVE
+  TEMPORARILY_CLOSED
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+model Company {
+  id          String        @id @default(uuid())
+  name        String
+  slug        String        @unique
+  email       String        @unique
+  phone       String?
+  address     String?
+  logoUrl     String?
+  status      CompanyStatus @default(ACTIVE)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  restaurants Restaurant[]
+
+  @@map("companies")
+}
+
+model Restaurant {
+  id          String           @id @default(uuid())
+  companyId   String
+  name        String
+  slug        String           @unique
+  description String?
+  cuisineType String?
+  logoUrl     String?
+  bannerUrl   String?
+  status      RestaurantStatus @default(ACTIVE)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  company  Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  branches Branch[]
+
+  @@index([companyId])
+  @@map("restaurants")
+}
+
+model Branch {
+  id           String       @id @default(uuid())
+  restaurantId String
+  name         String
+  phone        String?
+  email        String?
+  address      String
+  city         String
+  state        String?
+  country      String       @default("BD")
+  postalCode   String?
+  latitude     Decimal?     @db.Decimal(10, 8)
+  longitude    Decimal?     @db.Decimal(11, 8)
+  status       BranchStatus @default(ACTIVE)
+  isMainBranch Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  restaurant       Restaurant       @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  operatingHours   OperatingHours[]
+  staffAssignments StaffAssignment[]
+
+  @@index([restaurantId])
+  @@map("branches")
+}
+
+model OperatingHours {
+  id        String    @id @default(uuid())
+  branchId  String
+  day       DayOfWeek
+  openTime  String
+  closeTime String
+  isClosed  Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([branchId, day])
+  @@index([branchId])
+  @@map("operating_hours")
+}
+
+model StaffAssignment {
+  id         String   @id @default(uuid())
+  branchId   String
+  userId     String
+  role       String
+  isActive   Boolean  @default(true)
+  assignedAt DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([branchId, userId])
+  @@index([branchId])
+  @@index([userId])
+  @@map("staff_assignments")
+}
