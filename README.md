@@ -21,12 +21,12 @@ A multi-tenant restaurant management platform.
 ### Prerequisites
 
 - Node.js >= 20
-- pnpm >= 10
+- npm >= 10
 - Docker
 
 ### Install dependencies
 
-pnpm install
+npm install
 
 ### Start infrastructure
 
@@ -34,15 +34,15 @@ docker compose up -d
 
 ### Start a service
 
-pnpm --filter @restaurant/api-gateway dev
+npm --filter @restaurant/api-gateway dev
 
 ## Tab progress
 
 - [x] TAB 01 — Repository + monorepo + tooling
-- [ ] TAB 02 — Docker infrastructure
-- [ ] TAB 03 — Keycloak + authentication
-- [ ] TAB 04 — Restaurant Service + Prisma
-- [ ] TAB 05 — Catalog Service
+- [x] TAB 02 — Docker infrastructure
+- [x] TAB 03 — Keycloak + authentication
+- [x] TAB 04 — Restaurant Service + Prisma
+- [x] TAB 05 — Catalog Service
 - [ ] TAB 06 — Inventory Service
 - [ ] TAB 07 — Order Service
 - [ ] TAB 08 — Kitchen Service

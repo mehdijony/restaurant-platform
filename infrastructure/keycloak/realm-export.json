@@ -79,10 +79,14 @@
             "consentRequired": false,
             "fullScopeAllowed": true,
             "redirectUris": [
-                "http://localhost:3000/*"
+                "http://localhost:3000/*",
+                "http://localhost:3002/*",
+                "http://localhost:3003/*"
             ],
             "webOrigins": [
-                "http://localhost:3000"
+                "http://localhost:3000",
+                "http://localhost:3002/*",
+                "http://localhost:3003/*"
             ],
             "protocol": "openid-connect",
             "defaultClientScopes": [
@@ -111,11 +115,13 @@
             "fullScopeAllowed": true,
             "redirectUris": [
                 "http://localhost:3000/*",
-                "http://localhost:3002/*"
+                "http://localhost:3002/*",
+                "http://localhost:3003/*"
             ],
             "webOrigins": [
                 "http://localhost:3000",
-                "http://localhost:3002"
+                "http://localhost:3002",
+                "http://localhost:3003"
             ],
             "protocol": "openid-connect",
             "defaultClientScopes": [

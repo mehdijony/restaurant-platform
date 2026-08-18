@@ -1,0 +1,92 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type CategoryModel {
+  description: String
+  id: ID!
+  imageUrl: String
+  isActive: Boolean!
+  items: [MenuItemModel!]
+  name: String!
+  sortOrder: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type MenuItemModel {
+  calories: Int
+  description: String
+  id: ID!
+  imageUrl: String
+  isActive: Boolean!
+  modifierGroups: [ModifierGroupModel!]!
+  name: String!
+  preparationTime: Int
+  prices: [PriceModel!]!
+  sku: String
+  sortOrder: Int!
+  tags: [String!]!
+}
+
+type MenuModel {
+  branchId: String
+  description: String
+  id: ID!
+  name: String!
+  publishedAt: DateTime
+  restaurantId: String!
+  sections: [MenuSectionModel!]!
+  status: String!
+}
+
+type MenuSectionModel {
+  category: CategoryModel!
+  id: ID!
+  items: [MenuItemModel!]!
+}
+
+type ModifierGroupModel {
+  description: String
+  id: ID!
+  isActive: Boolean!
+  isRequired: Boolean!
+  maxSelections: Int!
+  minSelections: Int!
+  name: String!
+  options: [ModifierOptionModel!]!
+}
+
+type ModifierOptionModel {
+  additionalPrice: String!
+  id: ID!
+  isActive: Boolean!
+  isDefault: Boolean!
+  name: String!
+  sortOrder: Int!
+}
+
+type PriceModel {
+  amount: String!
+  branchId: String
+  currency: String!
+  id: ID!
+  isDefault: Boolean!
+  label: String
+  menuItemId: String!
+}
+
+type Query {
+  categories(branchId: String, restaurantId: String!): [CategoryModel!]!
+  category(id: ID!, restaurantId: String!): CategoryModel!
+  menu(id: ID!, restaurantId: String!): MenuModel
+  menuItem(id: ID!, restaurantId: String!): MenuItemModel!
+  menuItems(categoryId: String, restaurantId: String!): [MenuItemModel!]!
+  menus(branchId: String, restaurantId: String!): [MenuModel!]!
+  modifierGroup(id: ID!, restaurantId: String!): ModifierGroupModel!
+  modifierGroups(restaurantId: String!): [ModifierGroupModel!]!
+  publishedMenu(branchId: String, restaurantId: String!): MenuModel
+}

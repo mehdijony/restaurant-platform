@@ -1,0 +1,205 @@
+// services/catalog-service/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  // url      = env("DATABASE_URL")
+}
+
+// ─── Category ────────────────────────────────────────────────────────────────
+
+model Category {
+  id          String   @id @default(uuid())
+  restaurantId String
+  branchId    String?  // null = applies to all branches
+  name        String
+  description String?
+  imageUrl    String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  items       MenuItem[]
+  menuSections MenuSection[]
+
+  @@index([restaurantId])
+  @@index([restaurantId, branchId])
+}
+
+// ─── Menu Item ────────────────────────────────────────────────────────────────
+
+model MenuItem {
+  id          String   @id @default(uuid())
+  restaurantId String
+  categoryId  String
+  sku         String?
+  name        String
+  description String?
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  preparationTime Int? // minutes
+  calories    Int?
+  tags        String[] @default([])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category    Category @relation(fields: [categoryId], references: [id])
+  prices      Price[]
+  availability Availability[]
+  modifierGroups MenuItemModifierGroup[]
+  menuSectionItems MenuSectionItem[]
+
+  @@index([restaurantId])
+  @@index([categoryId])
+  @@unique([restaurantId, sku])
+}
+
+// ─── Price ───────────────────────────────────────────────────────────────────
+
+model Price {
+  id         String    @id @default(uuid())
+  menuItemId String
+  branchId   String?   // null = default price
+  label      String?   // e.g. "Small", "Large"
+  amount     Decimal   @db.Decimal(12, 4)
+  currency   String    @default("USD")
+  isDefault  Boolean   @default(false)
+  validFrom  DateTime?
+  validUntil DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  menuItem   MenuItem  @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  @@index([menuItemId])
+  @@index([menuItemId, branchId])
+}
+
+// ─── Availability ─────────────────────────────────────────────────────────────
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+model Availability {
+  id         String    @id @default(uuid())
+  menuItemId String
+  branchId   String?
+  dayOfWeek  DayOfWeek
+  startTime  String    // "HH:MM"
+  endTime    String    // "HH:MM"
+  createdAt  DateTime  @default(now())
+
+  menuItem   MenuItem  @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  @@index([menuItemId])
+}
+
+// ─── Modifier ─────────────────────────────────────────────────────────────────
+
+model ModifierGroup {
+  id          String   @id @default(uuid())
+  restaurantId String
+  name        String
+  description String?
+  isRequired  Boolean  @default(false)
+  minSelections Int    @default(0)
+  maxSelections Int    @default(1)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  options     ModifierOption[]
+  itemGroups  MenuItemModifierGroup[]
+
+  @@index([restaurantId])
+}
+
+model ModifierOption {
+  id              String   @id @default(uuid())
+  modifierGroupId String
+  name            String
+  additionalPrice Decimal  @db.Decimal(12, 4) @default(0)
+  isDefault       Boolean  @default(false)
+  isActive        Boolean  @default(true)
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  group           ModifierGroup @relation(fields: [modifierGroupId], references: [id], onDelete: Cascade)
+
+  @@index([modifierGroupId])
+}
+
+model MenuItemModifierGroup {
+  menuItemId      String
+  modifierGroupId String
+  sortOrder       Int    @default(0)
+
+  menuItem        MenuItem      @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  modifierGroup   ModifierGroup @relation(fields: [modifierGroupId], references: [id], onDelete: Cascade)
+
+  @@id([menuItemId, modifierGroupId])
+}
+
+// ─── Menu (Published Menu) ────────────────────────────────────────────────────
+
+enum MenuStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Menu {
+  id           String     @id @default(uuid())
+  restaurantId String
+  branchId     String?
+  name         String
+  description  String?
+  status       MenuStatus @default(DRAFT)
+  publishedAt  DateTime?
+  archivedAt   DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  sections     MenuSection[]
+
+  @@index([restaurantId])
+  @@index([restaurantId, branchId, status])
+}
+
+model MenuSection {
+  id          String @id @default(uuid())
+  menuId      String
+  categoryId  String
+  sortOrder   Int    @default(0)
+
+  menu        Menu     @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  category    Category @relation(fields: [categoryId], references: [id])
+  items       MenuSectionItem[]
+
+  @@index([menuId])
+}
+
+model MenuSectionItem {
+  menuSectionId String
+  menuItemId    String
+  sortOrder     Int    @default(0)
+
+  menuSection   MenuSection @relation(fields: [menuSectionId], references: [id], onDelete: Cascade)
+  menuItem      MenuItem    @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  @@id([menuSectionId, menuItemId])
+}
