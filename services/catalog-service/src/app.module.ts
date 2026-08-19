@@ -17,6 +17,7 @@ import { PricingModule } from './pricing/pricing.module';
 import { AvailabilityModule } from './availability/availability.module';
 import { HealthModule } from './health/health.module';
 import { MetricsModule } from './metrics/metrics.module';
+import { MenuItemsModule } from './menu-items/menu-items.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 
@@ -24,6 +25,7 @@ import { RolesGuard } from './common/guards/roles.guard';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
+    // GraphQL must be loaded before any resolver‑providing module
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'generated/schema.gql'),
@@ -32,6 +34,7 @@ import { RolesGuard } from './common/guards/roles.guard';
       playground: process.env.NODE_ENV !== 'production',
     }),
 
+    // feature modules – loaded after GraphQL so their resolvers are registered
     PrismaModule,
     EventsModule,
     CacheModule,
@@ -43,6 +46,7 @@ import { RolesGuard } from './common/guards/roles.guard';
     AvailabilityModule,
     HealthModule,
     MetricsModule,
+    MenuItemsModule,
   ],
   controllers: [],
   providers: [

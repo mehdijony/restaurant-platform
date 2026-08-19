@@ -20,7 +20,7 @@ async function bootstrap() {
   app.enableCors();
   app.setGlobalPrefix('api/v1');
 
-  const port = process.env.PORT ?? 3003;
+  const port = Number(process.env.PORT) || 3003;
   await app.listen(port);
   logger.log(`Catalog Service listening on port ${port}`);
 }

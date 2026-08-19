@@ -84,7 +84,7 @@ type Query {
   category(id: ID!, restaurantId: String!): CategoryModel!
   menu(id: ID!, restaurantId: String!): MenuModel
   menuItem(id: ID!, restaurantId: String!): MenuItemModel!
-  menuItems(categoryId: String, restaurantId: String!): [MenuItemModel!]!
+  menuItems(branchId: String, restaurantId: String!): [MenuItemModel!]!
   menus(branchId: String, restaurantId: String!): [MenuModel!]!
   modifierGroup(id: ID!, restaurantId: String!): ModifierGroupModel!
   modifierGroups(restaurantId: String!): [ModifierGroupModel!]!

@@ -27,6 +27,13 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(GlobalExceptionFilter.name);
 
   catch(exception: unknown, host: ArgumentsHost): void {
+    const ctxType = host.getType() as string;
+
+    if (ctxType === 'graphql') {
+      // Re-throw the exception to be handled by GraphQL
+      throw exception;
+    }
+
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
@@ -58,13 +65,17 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
     // ── Log internal errors ────────────────────────────────
     if (status >= 500) {
+      const method = request?.method ?? 'UNKNOWN';
+      const url = request?.url ?? 'UNKNOWN';
       this.logger.error(
-        `[${request.method}] ${request.url} → ${status}`,
+        `[${method}] ${url} → ${status}`,
         exception instanceof Error ? exception.stack : String(exception),
       );
     } else {
+      const method = request?.method ?? 'UNKNOWN';
+      const url = request?.url ?? 'UNKNOWN';
       this.logger.warn(
-        `[${request.method}] ${request.url} → ${status} | ${JSON.stringify(message)}`,
+        `[${method}] ${url} → ${status} | ${JSON.stringify(message)}`,
       );
     }
 

@@ -1,4 +1,3 @@
-// interceptors/response.interceptor.ts
 import {
   Injectable,
   NestInterceptor,
@@ -7,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { GqlContextType } from '@nestjs/graphql'; // ← add this
 
 export interface ApiResponse<T> {
   success: number;
@@ -56,12 +56,20 @@ function getDefaultMessage(statusCode: number): string {
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<
   T,
-  ApiResponse<T> | PaginatedApiResponse<T>
+  ApiResponse<T> | PaginatedApiResponse<T> | T // ← add T to union
 > {
   intercept(
     context: ExecutionContext,
     next: CallHandler<T>,
-  ): Observable<ApiResponse<T> | PaginatedApiResponse<T>> {
+  ): Observable<ApiResponse<T> | PaginatedApiResponse<T> | T> {
+    // ← add T to union
+
+    // ─── Skip for GraphQL — return raw resolver value ──────────
+    if (context.getType<GqlContextType>() === 'graphql') {
+      return next.handle(); // ← no wrapping, pass through as-is
+    }
+
+    // ─── REST only below ───────────────────────────────────────
     const ctx = context.switchToHttp();
     const response = ctx.getResponse<{ statusCode: number }>();
 

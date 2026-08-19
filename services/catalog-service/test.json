@@ -1,0 +1,14 @@
+{
+  "query": "query Categories($restaurantId: String!) {
+    categories(restaurantId: $restaurantId) {
+      id
+      name
+      description
+      sortOrder
+      isActive
+    }
+  }",
+  "variables": {
+    "restaurantId": "43f10510-ac06-47a7-8d6e-bebaf94c7859"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "query": "query MenuItems($restaurantId: String!) {
+    menuItems(restaurantId: $restaurantId) {
+      id
+      name
+      description
+      sortOrder
+      isActive
+      tags
+      preparationTime
+      calories
+      prices {
+        id
+        amount
+        currency
+        isDefault
+      }
+      modifierGroups {
+        id
+        name
+        isRequired
+        options {
+          id
+          name
+          additionalPrice
+        }
+      }
+    }
+  }",
+  "variables": {
+    "restaurantId": "43f10510-ac06-47a7-8d6e-bebaf94c7859"
+  }
+}
