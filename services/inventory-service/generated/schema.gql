@@ -1,0 +1,96 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type IngredientModel {
+  description: String
+  id: ID!
+  isActive: Boolean!
+  name: String!
+  reorderPoint: String!
+  reorderQuantity: String!
+  restaurantId: String!
+  sku: String
+  stockLevels: [StockLevelRef!]!
+  unit: UnitRef!
+}
+
+type IngredientRef {
+  id: ID!
+  name: String!
+  restaurantId: String!
+}
+
+type MovementLineModel {
+  id: ID!
+  ingredientId: String!
+  notes: String
+  quantity: String!
+  unitCost: String
+}
+
+type Query {
+  ingredient(id: ID!, restaurantId: String!): IngredientModel!
+  ingredients(restaurantId: String!): [IngredientModel!]!
+  stockLevels(ingredientId: String, restaurantId: String!, warehouseId: String): [StockLevelModel!]!
+  stockMovement(id: ID!, restaurantId: String!): StockMovementModel!
+  stockMovements(limit: Int = 50, offset: Int = 0, restaurantId: String!, type: String, warehouseId: String): [StockMovementModel!]!
+  supplier(id: ID!, restaurantId: String!): SupplierModel!
+  suppliers(restaurantId: String!): [SupplierModel!]!
+}
+
+type StockLevelModel {
+  id: ID!
+  ingredient: IngredientRef!
+  ingredientId: String!
+  quantity: String!
+  reservedQty: String!
+  warehouse: WarehouseRef!
+  warehouseId: String!
+}
+
+type StockLevelRef {
+  quantity: String!
+  reservedQty: String!
+  warehouseId: String!
+}
+
+type StockMovementModel {
+  createdAt: DateTime!
+  fromWarehouseId: String
+  id: ID!
+  lines: [MovementLineModel!]!
+  notes: String
+  restaurantId: String!
+  status: String!
+  toWarehouseId: String
+  type: String!
+}
+
+type SupplierModel {
+  address: String
+  contactName: String
+  createdAt: DateTime!
+  email: String
+  id: ID!
+  isActive: Boolean!
+  name: String!
+  phone: String
+  restaurantId: String!
+}
+
+type UnitRef {
+  abbreviation: String!
+  id: ID!
+  name: String!
+}
+
+type WarehouseRef {
+  id: ID!
+  name: String!
+}

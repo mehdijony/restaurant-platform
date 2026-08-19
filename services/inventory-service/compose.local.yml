@@ -1,0 +1,29 @@
+# append to compose.local.yml
+
+inventory-service:
+  build:
+    context: .
+    dockerfile: services/inventory-service/Dockerfile
+  ports:
+    - "3003:3003"
+  environment:
+    PORT: 3003
+    NODE_ENV: development
+    DATABASE_URL: postgresql://restaurant:restaurant@postgres:5432/inventory_db
+    RABBITMQ_URL: amqp://restaurant:restaurant@rabbitmq:5672
+    VALKEY_HOST: valkey
+    VALKEY_PORT: 6379
+    KEYCLOAK_JWKS_URI: http://keycloak:8080/realms/restaurant/protocol/openid-connect/certs
+  depends_on:
+    postgres:
+      condition: service_healthy
+    rabbitmq:
+      condition: service_healthy
+  networks:
+    - restaurant-network
+  restart: unless-stopped
+  healthcheck:
+    test: [ "CMD", "wget", "-qO-", "http://localhost:3003/api/v1/health" ]
+    interval: 30s
+    timeout: 5s
+    retries: 3
