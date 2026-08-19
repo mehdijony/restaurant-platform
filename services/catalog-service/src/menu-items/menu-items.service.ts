@@ -8,11 +8,33 @@ export class MenuItemsService {
 
   constructor(private readonly prisma: PrismaService) {}
 
+  async findOne(id: string, restaurantId: string): Promise<any> {
+    return this.prisma.menuItem.findFirst({
+      where: {
+        id,
+        restaurantId,
+        isActive: true,
+      },
+      include: {
+        prices: true,
+        modifierGroups: {
+          include: {
+            modifierGroup: {
+              include: {
+                options: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
   async findAll(restaurantId: string, branchId?: string): Promise<any[]> {
     return this.prisma.menuItem.findMany({
       where: {
         restaurantId,
         isActive: true,
+        ...(branchId ? { branchId } : {}),
       },
       include: {
         prices: true,
@@ -30,5 +52,5 @@ export class MenuItemsService {
     });
   }
 
-  // Additional methods like findOne, create, etc. can be added here
+
 }
