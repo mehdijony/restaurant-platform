@@ -2,6 +2,14 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateWarehouseDto {
+  branchId: String
+  description: String
+  isActive: Boolean
+  name: String!
+  restaurantId: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -34,6 +42,10 @@ type MovementLineModel {
   unitCost: String
 }
 
+type Mutation {
+  createWarehouse(dto: CreateWarehouseDto!): WarehouseModel!
+}
+
 type Query {
   ingredient(id: ID!, restaurantId: String!): IngredientModel!
   ingredients(restaurantId: String!): [IngredientModel!]!
@@ -42,6 +54,8 @@ type Query {
   stockMovements(limit: Int = 50, offset: Int = 0, restaurantId: String!, type: String, warehouseId: String): [StockMovementModel!]!
   supplier(id: ID!, restaurantId: String!): SupplierModel!
   suppliers(restaurantId: String!): [SupplierModel!]!
+  warehouse(id: ID!, restaurantId: String!): WarehouseModel!
+  warehouses(branchId: String, restaurantId: String!): [WarehouseModel!]!
 }
 
 type StockLevelModel {
@@ -88,6 +102,15 @@ type UnitRef {
   abbreviation: String!
   id: ID!
   name: String!
+}
+
+type WarehouseModel {
+  branchId: String
+  description: String
+  id: ID!
+  isActive: Boolean!
+  name: String!
+  restaurantId: String!
 }
 
 type WarehouseRef {

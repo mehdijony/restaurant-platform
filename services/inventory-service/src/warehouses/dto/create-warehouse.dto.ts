@@ -7,21 +7,32 @@ import {
   MinLength,
   MaxLength,
 } from 'class-validator';
+import { InputType, Field } from '@nestjs/graphql';
 
+@InputType()
 export class CreateWarehouseDto {
-  @IsUUID() restaurantId!: string;
-  @IsUUID() @IsOptional() branchId?: string;
+  @Field()
+  @IsUUID()
+  restaurantId!: string;
 
+  @Field({ nullable: true })
+  @IsUUID()
+  @IsOptional()
+  branchId?: string;
+
+  @Field()
   @IsString()
   @MinLength(1)
   @MaxLength(120)
   name!: string;
 
+  @Field({ nullable: true })
   @IsString()
   @IsOptional()
   @MaxLength(500)
   description?: string;
 
+  @Field({ nullable: true })
   @IsBoolean()
   @IsOptional()
   isActive?: boolean;

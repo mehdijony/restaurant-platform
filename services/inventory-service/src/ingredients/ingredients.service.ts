@@ -45,7 +45,7 @@ export class IngredientsService {
   findAll(restaurantId: string) {
     return this.prisma.ingredient.findMany({
       where: { restaurantId, isActive: true },
-      include: { unit: true },
+      include: { unit: true, stockLevels: { include: { warehouse: true } } },
       orderBy: { name: 'asc' },
     });
   }
